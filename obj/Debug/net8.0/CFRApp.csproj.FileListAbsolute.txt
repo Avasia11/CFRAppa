@@ -112,3 +112,4 @@ C:\Users\avasi\Desktop\ProiectLicenta_CFR\CFRApp\CFRApp\obj\Debug\net8.0\refint\
 C:\Users\avasi\Desktop\ProiectLicenta_CFR\CFRApp\CFRApp\obj\Debug\net8.0\CFRApp.pdb
 C:\Users\avasi\Desktop\ProiectLicenta_CFR\CFRApp\CFRApp\obj\Debug\net8.0\CFRApp.genruntimeconfig.cache
 C:\Users\avasi\Desktop\ProiectLicenta_CFR\CFRApp\CFRApp\obj\Debug\net8.0\ref\CFRApp.dll
+C:\Users\avasi\Desktop\ProiectLicenta_CFR\CFRApp\CFRApp\obj\Debug\net8.0\CFRApp.sourcelink.json
