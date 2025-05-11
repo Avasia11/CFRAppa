@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+}
+<style>
+    .dashboard-wrapper {
+        position: relative;
+        height: calc(100vh - 56px); /* scade doar navbarul */
+        margin: 0;
+        padding: 0;
+        background-image: url('/images/dashboard_tracks.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+
+
+<div class="dashboard-wrapper">
+    <div class="d-flex align-items-center justify-content-center text-white" style="height: 100%;">
+        <div class="bg-dark bg-opacity-75 p-5 rounded shadow text-center" style="max-width: 700px; width: 100%;">
+            <h2 class="mb-4">Bine ai venit la CFR Călători!</h2>
+            <p class="lead">Planifică, rezervă și urmărește călătoriile tale rapid și ușor.</p>
+
+            <div class="mt-4 d-flex flex-wrap justify-content-center gap-3">
+                <a href="/Route/Search" class="btn btn-outline-light btn-lg">🔍 Caută trenuri</a>
+                <a href="/Ticket/MyTickets" class="btn btn-outline-light btn-lg">🎫 Biletele mele</a>
+                <a href="/Account/Settings" class="btn btn-outline-light btn-lg">⚙️ Setări cont</a>
+                <a href="/Delay/LiveStatus" class="btn btn-outline-light btn-lg">🚦 Status trenuri</a>
+                <a href="/Feedback/Suggest" class="btn btn-outline-light btn-lg">📝 Feedback</a>
+                <a href="/Map/Stations" class="btn btn-outline-light btn-lg">📍 Harta stațiilor</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

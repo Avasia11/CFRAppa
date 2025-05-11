@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Autentificare";
+}
+
+<div class="container mt-5">
+    <div class="row shadow rounded overflow-hidden">
+        <!-- Coloană cu imaginea -->
+        <div class="col-md-6 d-none d-md-block p-0">
+            <img src="~/images/login_train.png" alt="Login Train" class="img-fluid h-100 w-100" style="object-fit: cover;" />
+        </div>
+
+        <!-- Coloană cu formularul -->
+        <div class="col-md-6 bg-white p-5">
+            <h3 class="mb-4">Autentificare</h3>
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <form asp-action="Login" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input name="email" class="form-control" type="email" required />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Parolă</label>
+                    <input name="password" class="form-control" type="password" required />
+                </div>
+                <button type="submit" class="btn btn-success w-100">Autentificare</button>
+            </form>
+
+            <div class="mt-3 text-center">
+                Nu ai cont? <a href="/Account/Register">Înregistrează-te</a>
+            </div>
+        </div>
+    </div>
+</div>
