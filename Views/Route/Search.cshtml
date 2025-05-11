@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Caută Trenuri";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Caută Trenuri</h2>
+
+    <form asp-action="Search" method="post">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="departure" class="form-label">Stație plecare</label>
+                <select name="departureStationId" class="form-select" required>
+                    <option value="">Selectează...</option>
+                    @foreach (var station in ViewBag.Stations)
+                    {
+                        <option value="@station.Id">@station.Name (@station.City)</option>
+                    }
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="arrival" class="form-label">Stație sosire</label>
+                <select name="arrivalStationId" class="form-select" required>
+                    <option value="">Selectează...</option>
+                    @foreach (var station in ViewBag.Stations)
+                    {
+                        <option value="@station.Id">@station.Name (@station.City)</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="travelDate" class="form-label">Dată călătorie</label>
+            <input type="date" name="travelDate" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Caută trenuri</button>
+    </form>
+
+    @if (ViewBag.Results != null)
+    {
+        <hr class="mt-5" />
+        <h4>Rezultate pentru: <b>@ViewBag.DepartureStation</b> → <b>@ViewBag.ArrivalStation</b> în data de <b>@ViewBag.Date</b></h4>
+
+        @if (((IEnumerable<dynamic>)ViewBag.Results).Any())
+        {
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Tren</th>
+                        <th>Ora plecare</th>
+                        <th>Ora sosire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var result in ViewBag.Results)
+                    {
+                        <tr>
+                            <td>@result.Train.Name (@result.Train.Number)</td>
+                            <td>@result.DepartureTime?.ToString(@"hh\:mm")</td>
+                            <td>@result.ArrivalTime?.ToString(@"hh\:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-danger mt-3">Nu am găsit niciun tren disponibil pe această rută.</p>
+        }
+    }
+</div>

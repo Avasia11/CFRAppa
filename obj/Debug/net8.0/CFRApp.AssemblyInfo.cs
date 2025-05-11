@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CFRApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af286cb8bf62dc40cf5f807abe65c6d56c92003a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78e516dbf3586bf1ab3097dac1c25e8f5b0eb319")]
 [assembly: System.Reflection.AssemblyProductAttribute("CFRApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CFRApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

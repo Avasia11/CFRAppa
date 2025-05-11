@@ -13,7 +13,7 @@
 
 <body>
     <body>
-        @if (Context.Request.Path != "/Account/Login" && Context.Request.Path != "/Account/Register")
+        @if (Context.Request.Path != "/Account/Login" && Context.Request.Path != "/Account/Register" && User.Identity.IsAuthenticated)
         {
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
                 <a class="navbar-brand fw-bold" href="/Home/Dashboard">CFRApp</a>
@@ -28,7 +28,7 @@
                                 📋 Funcționalități
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="/Route/Search">🔍 Caută trenuri</a></li>
+                                <li><a class="dropdown-item" asp-controller="Route" asp-action="Search">🔍 Caută trenuri</a></li>
                                 <li><a class="dropdown-item" href="/Ticket/MyTickets">🎫 Biletele mele</a></li>
                                 <li><a class="dropdown-item" href="/Delay/LiveStatus">🚦 Status trenuri</a></li>
                                 <li><a class="dropdown-item" href="/Map/Stations">📍 Harta stațiilor</a></li>
