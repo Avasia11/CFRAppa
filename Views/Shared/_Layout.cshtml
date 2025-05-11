@@ -40,7 +40,10 @@
                         <li class="nav-item dropdown ms-3">
                             <a class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
-                                👤 @User.Identity.Name
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <span>👤 @User.Identity.Name</span>
+                                }
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="/Account/Settings">⚙️ Setări cont</a></li>
