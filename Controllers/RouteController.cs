@@ -2,6 +2,7 @@
 using CFRApp.Data;
 using System;
 using System.Linq;
+using CFRApp.Models;
 
 namespace CFRApp.Controllers
 {
@@ -26,9 +27,11 @@ namespace CFRApp.Controllers
         public IActionResult Search(int departureStationId, int arrivalStationId, DateTime travelDate)
         {
             ViewBag.Stations = _context.Stations.ToList();
+            ViewBag.DepartureStation = _context.Stations.Find(departureStationId)?.Name;
+            ViewBag.ArrivalStation = _context.Stations.Find(arrivalStationId)?.Name;
+            ViewBag.Date = travelDate.ToShortDateString();
 
-            // Căutăm rute posibile
-            var matchingTrains = _context.Routes
+            var results = _context.Routes
                 .Where(r => r.StationId == departureStationId)
                 .Join(
                     _context.Routes.Where(r2 => r2.StationId == arrivalStationId),
@@ -39,21 +42,19 @@ namespace CFRApp.Controllers
                 .Where(x => x.dep.Order < x.arr.Order)
                 .Select(x => new
                 {
-                    TrainId = x.dep.TrainId,
-                    Train = x.dep.Train,
-                    DepartureTime = x.dep.DepartureTime,
-                    ArrivalTime = x.arr.ArrivalTime
+                    Tren = x.dep.Train,
+                    OraPlecare = x.dep.DepartureTime,
+                    OraSosire = x.arr.ArrivalTime
                 })
                 .Distinct()
                 .ToList();
 
-            ViewBag.Results = matchingTrains;
-            ViewBag.DepartureStation = _context.Stations.Find(departureStationId)?.Name;
-            ViewBag.ArrivalStation = _context.Stations.Find(arrivalStationId)?.Name;
-            ViewBag.Date = travelDate.ToShortDateString();
+            ViewBag.Results = results;
 
             return View();
         }
+
+
 
     }
 }

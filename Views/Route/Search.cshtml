@@ -8,7 +8,7 @@
     <form asp-action="Search" method="post">
         <div class="row mb-3">
             <div class="col-md-6">
-                <label for="departure" class="form-label">Stație plecare</label>
+                <label class="form-label">Stație plecare</label>
                 <select name="departureStationId" class="form-select" required>
                     <option value="">Selectează...</option>
                     @foreach (var station in ViewBag.Stations)
@@ -17,9 +17,8 @@
                     }
                 </select>
             </div>
-
             <div class="col-md-6">
-                <label for="arrival" class="form-label">Stație sosire</label>
+                <label class="form-label">Stație sosire</label>
                 <select name="arrivalStationId" class="form-select" required>
                     <option value="">Selectează...</option>
                     @foreach (var station in ViewBag.Stations)
@@ -31,7 +30,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="travelDate" class="form-label">Dată călătorie</label>
+            <label class="form-label">Dată călătorie</label>
             <input type="date" name="travelDate" class="form-control" required />
         </div>
 
@@ -45,7 +44,7 @@
 
         @if (((IEnumerable<dynamic>)ViewBag.Results).Any())
         {
-            <table class="table table-striped mt-3">
+            <table class="table table-bordered mt-3">
                 <thead>
                     <tr>
                         <th>Tren</th>
@@ -54,12 +53,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var result in ViewBag.Results)
+                    @foreach (var item in ViewBag.Results)
                     {
                         <tr>
-                            <td>@result.Train.Name (@result.Train.Number)</td>
-                            <td>@result.DepartureTime?.ToString(@"hh\:mm")</td>
-                            <td>@result.ArrivalTime?.ToString(@"hh\:mm")</td>
+                            <td>@item.Tren.Number - @item.Tren.Name</td>
+                            <td>@item.OraPlecare?.ToString(@"hh\:mm")</td>
+                            <td>@item.OraSosire?.ToString(@"hh\:mm")</td>
                         </tr>
                     }
                 </tbody>
@@ -67,7 +66,7 @@
         }
         else
         {
-            <p class="text-danger mt-3">Nu am găsit niciun tren disponibil pe această rută.</p>
+            <p class="text-danger mt-3">Nu am găsit niciun tren direct pe această rută.</p>
         }
     }
 </div>
