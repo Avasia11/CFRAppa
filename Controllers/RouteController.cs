@@ -17,7 +17,7 @@ namespace CFRApp.Controllers
         // GET: /Route/Search
         public IActionResult Search()
         {
-            ViewBag.Stations = _context.Stations.ToList();
+            ViewBag.Stations = _context.Stations.ToList(); // <– foarte important
             return View();
         }
 
