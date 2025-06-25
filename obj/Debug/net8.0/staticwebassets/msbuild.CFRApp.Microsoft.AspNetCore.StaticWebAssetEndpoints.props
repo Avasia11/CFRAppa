@@ -36,6 +36,18 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Jtxf9L\u002B5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"5430"},{"Name":"Content-Type","Value":"image/x-icon"},{"Name":"ETag","Value":"\u0022Jtxf9L\u002B5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM=\u0022"},{"Name":"Last-Modified","Value":"Sun, 11 May 2025 13:24:40 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/CFRApp/images/cfr-visual.png.3h9pitb33s.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\cfr-visual.png.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"3h9pitb33s"},{"Name":"integrity","Value":"sha256-ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ\u002BkxP7k="},{"Name":"label","Value":"_content/CFRApp/images/cfr-visual.png.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1342064"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ\u002BkxP7k=\u0022"},{"Name":"Last-Modified","Value":"Fri, 13 Jun 2025 20:59:20 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/CFRApp/images/cfr-visual.png.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\cfr-visual.png.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ\u002BkxP7k="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1342064"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ\u002BkxP7k=\u0022"},{"Name":"Last-Modified","Value":"Fri, 13 Jun 2025 20:59:20 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/CFRApp/images/dashboard_tracks.cu8mw0hvaw.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\dashboard_tracks.png'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>

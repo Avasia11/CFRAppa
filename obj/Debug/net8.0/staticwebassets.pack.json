@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\avasi\\Desktop\\ProiectLicenta_CFR\\CFRApp\\CFRApp\\wwwroot\\images\\cfr-visual.png.png",
+      "PackagePath": "staticwebassets\\images\\cfr-visual.png.png"
+    },
+    {
       "Id": "C:\\Users\\avasi\\Desktop\\ProiectLicenta_CFR\\CFRApp\\CFRApp\\wwwroot\\images\\dashboard_tracks.png",
       "PackagePath": "staticwebassets\\images\\dashboard_tracks.png"
     },

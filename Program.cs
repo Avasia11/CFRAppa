@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 builder.Services.AddSession();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
@@ -46,6 +47,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
+app.MapRazorPages();
+
 
 
 app.MapControllerRoute(

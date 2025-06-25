@@ -1,5 +1,6 @@
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\images\cfr-visual.png.png
 wwwroot\images\dashboard_tracks.png
 wwwroot\images\login_train.png
 wwwroot\images\register_left.png

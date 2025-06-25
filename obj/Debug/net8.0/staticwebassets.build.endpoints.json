@@ -249,6 +249,88 @@
       ]
     },
     {
+      "Route": "images/cfr-visual.png.3h9pitb33s.png",
+      "AssetFile": "images/cfr-visual.png.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1342064"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 13 Jun 2025 20:59:20 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3h9pitb33s"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k="
+        },
+        {
+          "Name": "label",
+          "Value": "images/cfr-visual.png.png"
+        }
+      ]
+    },
+    {
+      "Route": "images/cfr-visual.png.png",
+      "AssetFile": "images/cfr-visual.png.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1342064"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 13 Jun 2025 20:59:20 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k="
+        }
+      ]
+    },
+    {
       "Route": "images/dashboard_tracks.cu8mw0hvaw.png",
       "AssetFile": "images/dashboard_tracks.png",
       "Selectors": [],

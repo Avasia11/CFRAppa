@@ -1,0 +1,333 @@
+﻿@model CFRApp.Models.BuyTicketViewModel
+
+<div class="modal-header">
+    <h5 class="modal-title fw-bold text-primary">Cumpără bilet</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+    <div id="ticketWizard">
+        <!-- PAS 1: Confirmare rută -->
+        <div class="wizard-step" id="step1">
+            <h5 class="mb-3 fw-semibold">📍 Confirmare rută și tren</h5>
+            <div class="card border shadow-sm">
+                <div class="card-body">
+                    <p><strong>Tren:</strong> @Model.TrainNumber (@Model.TrainType) – @Model.Operator</p>
+                    <p><strong>De la:</strong> @Model.FromStation → <strong>La:</strong> @Model.ToStation</p>
+                    <p><strong>Ora plecare:</strong> @Model.DepartureTime</p>
+                    <p><strong>Data:</strong> @Model.Date.ToString("dd.MM.yyyy")</p>
+                </div>
+            </div>
+
+            <div class="form-check mt-4">
+                <input class="form-check-input" type="checkbox" value="true" id="includeReturn" />
+                <label class="form-check-label" for="includeReturn">
+                    Doresc și bilet de întoarcere (reducere 10%)
+                </label>
+            </div>
+
+            <div id="returnOptions" class="mt-4 d-none">
+                <label class="form-label">Selectează data returului:</label>
+                <input type="date" id="returnDate" class="form-control mb-3" />
+
+                <label class="form-label">Selectează rută de retur:</label>
+                <select id="returnRoute" class="form-select">
+                    <option value="">-- Selectează dată mai întâi --</option>
+                </select>
+
+                <div id="noReturnRoutes" class="text-danger mt-2 d-none">
+                    Nu există trenuri disponibile pentru data aleasă.
+                </div>
+            </div>
+
+
+            <div class="mt-4 d-flex justify-content-end">
+                <button class="btn btn-primary" onclick="goToStep(2)">Continuă</button>
+            </div>
+        </div>
+
+        <!-- PAS 2: Date pasager -->
+        <div class="wizard-step d-none" id="step2">
+            <h5 class="mb-3 fw-semibold">🡭 Informații pasager</h5>
+            <div class="mb-3">
+                <label class="form-label">Nume complet:</label>
+                <input type="text" class="form-control" id="passengerName" placeholder="ex: Andrei Popescu" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tip pasager:</label>
+                <select id="passengerType" class="form-select">
+                    <option value="Adult">Adult</option>
+                    <option value="Student">Student</option>
+                    <option value="Elev">Elev</option>
+                    <option value="Pensionar">Pensionar</option>
+                    <option value="Veteran">Veteran</option>
+                    <option value="Handicap">Persoană cu dizabilități</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email (opțional):</label>
+                <input type="email" class="form-control" id="passengerEmail" placeholder="ex: exemplu@email.com">
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+                <button class="btn btn-outline-secondary" onclick="goToStep(1)">Îneapoi</button>
+                <button class="btn btn-primary" onclick="goToStep(3)">Continuă</button>
+            </div>
+        </div>
+
+        <!-- PAS 3: Selectare loc -->
+        <div class="wizard-step d-none" id="step3">
+            <h5 class="mb-3 fw-semibold">🚈 Selectează vagon și loc</h5>
+            <div class="mb-3">
+                <label class="form-label">Vagon:</label>
+                <select id="carriageSelect" class="form-select">
+                    <option value="Vagon 1">Vagon 1</option>
+                    <option value="Vagon 2">Vagon 2</option>
+                    <option value="Vagon 3">Vagon 3</option>
+                    <option value="Vagon 4">Vagon 4</option>
+                    <option value="Vagon 5">Vagon 5</option>
+                </select>
+            </div>
+            <div id="seatGrid" class="border rounded p-3 overflow-auto" style="max-height: 300px;">
+                <div class="d-flex flex-wrap justify-content-start" style="gap: 8px;" id="seatContainer"></div>
+            </div>
+            <div class="text-muted mt-2">
+                <span class="badge bg-success">Liber</span>
+                <span class="badge bg-danger">Ocupat</span>
+                <span class="badge bg-primary">Selectat</span>
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+                <button class="btn btn-outline-secondary" onclick="goToStep(2)">Îneapoi</button>
+                <button class="btn btn-primary" onclick="goToStep(4)">Continuă</button>
+            </div>
+        </div>
+
+        <!-- PAS 4: Confirmare plată -->
+        <div class="wizard-step d-none" id="step4">
+            <h5 class="mb-3 fw-semibold">💳 Detalii plată</h5>
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h6 class="fw-bold text-primary">🦾 Rezumat călătorie</h6>
+                    <ul class="mb-0">
+                        <li><strong>Pasager:</strong> <span id="summaryName"></span> (<span id="summaryType"></span>)</li>
+                        <li><strong>Tren:</strong> <span id="summaryTrain"></span></li>
+                        <li><strong>Traseu:</strong> <span id="summaryFromTo"></span></li>
+                        <li><strong>Loc:</strong> <span id="summarySeat"></span>, <span id="summaryCarriage"></span></li>
+                        <li><strong>Tip bilet:</strong> <span id="summaryDirection"></span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Metodă de plată:</label>
+                <select class="form-select" id="paymentMethod">
+                    <option value="card">Card bancar</option>
+                    <option value="cash">Plată la ghișeu</option>
+                    <option value="wallet">Portofel electronic</option>
+                </select>
+            </div>
+            <div class="text-center my-4">
+                <h5>Total de plată: <span id="finalPrice" class="text-success fw-bold"></span> lei</h5>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button class="btn btn-outline-secondary" onclick="goToStep(3)">Înapoi</button>
+                <button class="btn btn-success" onclick="collectAndSendTicket()">Confirmă și cumpără</button>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function goToStep(n) {
+        document.querySelectorAll(".wizard-step").forEach(step => step.classList.add("d-none"));
+        document.getElementById(`step${n}`).classList.remove("d-none");
+        if (n === 4) updatePaymentSummary();
+    }
+
+    const occupiedSeats = ["A1", "B2", "C3", "F10"];
+    let selectedSeat = null;
+
+    function generateSeats() {
+        const seatContainer = document.getElementById("seatContainer");
+        seatContainer.innerHTML = "";
+        const rows = ["A","B","C","D","E","F","G","H","I","J"];
+        const cols = 10;
+
+        for (let row of rows) {
+            for (let i = 1; i <= cols; i++) {
+                const seatId = row + i;
+                const btn = document.createElement("button");
+                btn.textContent = seatId;
+                btn.className = "btn btn-sm";
+
+                if (occupiedSeats.includes(seatId)) {
+                    btn.classList.add("btn-danger");
+                    btn.disabled = true;
+                } else {
+                    btn.classList.add("btn-outline-success");
+                    btn.onclick = () => selectSeat(btn, seatId);
+                }
+
+                seatContainer.appendChild(btn);
+            }
+        }
+    }
+
+    function selectSeat(btn, seatId) {
+        if (selectedSeat) {
+            selectedSeat.classList.remove("btn-primary");
+            selectedSeat.classList.add("btn-outline-success");
+        }
+        selectedSeat = btn;
+        selectedSeat.classList.remove("btn-outline-success");
+        selectedSeat.classList.add("btn-primary");
+    }
+
+    function updatePaymentSummary() {
+        const name = document.getElementById('passengerName').value;
+        const type = document.getElementById('passengerType').value;
+        const train = "@Model.TrainNumber";
+        const from = "@Model.FromStation";
+        const to = "@Model.ToStation";
+        const seat = selectedSeat?.textContent || 'Nespecificat';
+        const carriage = document.getElementById('carriageSelect').value;
+        const isReturn = document.getElementById('includeReturn').checked;
+
+        const baseStops = 3;
+        const pricePerStation = 11;
+        const multipliers = {
+            "Adult": 1,
+            "Student": 0.66,
+            "Elev": 0.33,
+            "Pensionar": 0.5,
+            "Veteran": 0,
+            "Handicap": 0.2
+        };
+        const multiplier = multipliers[type] ?? 1;
+
+        let total = baseStops * pricePerStation * multiplier;
+        if (isReturn) total *= 2 * 0.9;
+
+        document.getElementById('summaryName').textContent = name;
+        document.getElementById('summaryType').textContent = type;
+        document.getElementById('summaryTrain').textContent = train;
+        document.getElementById('summaryFromTo').textContent = `${from} → ${to}`;
+        document.getElementById('summarySeat').textContent = seat;
+        document.getElementById('summaryCarriage').textContent = carriage;
+        document.getElementById('summaryDirection').textContent = isReturn ? 'Dus-întors (-10%)' : 'Doar dus';
+        document.getElementById('finalPrice').textContent = total.toFixed(2);
+    }
+
+    document.addEventListener('DOMContentLoaded', generateSeats);
+</script>
+
+<script>
+    function collectAndSendTicket() {
+        const seat = selectedSeat?.textContent;
+        const carriage = document.getElementById('carriageSelect').value;
+        const name = document.getElementById('passengerName').value;
+        const type = document.getElementById('passengerType').value;
+        const email = document.getElementById('passengerEmail').value;
+        const isReturn = document.getElementById('includeReturn').checked;
+        const returnDate = document.getElementById('returnDate')?.value || null;
+        const returnRoute = document.getElementById('returnRoute')?.value || null;
+        const payment = document.getElementById('paymentMethod').value;
+
+        const ticketData = {
+            UserId: 1, // poți înlocui cu ID-ul real dacă ai autentificare
+            TrainId: @Model.TrainId,
+            TrainNumber: "@Model.TrainNumber",
+            FromStation: "@Model.FromStation",
+            ToStation: "@Model.ToStation",
+            DepartureStationId: @Model.DepartureStationId,
+            ArrivalStationId: @Model.ArrivalStationId,
+            Date: "@Model.Date.ToString("yyyy-MM-dd")",
+            DepartureTime: "@Model.DepartureTime.ToString()",
+            SeatCode: seat,
+            Carriage: carriage,
+            PassengerName: name,
+            PassengerType: type,
+            PassengerEmail: email,
+            IsReturn: isReturn,
+            ReturnDate: returnDate,
+            ReturnRouteId: returnRoute,
+            PaymentMethod: payment,
+            TotalPrice: parseFloat(document.getElementById('finalPrice').textContent)
+        };
+
+        fetch("/Ticket/Buy", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(ticketData)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("🎉 Bilet cumpărat cu succes!");
+                $('#buyTicketModal').modal('hide'); // închide pop-up-ul
+            } else {
+                alert("❌ Eroare: " + data.message);
+            }
+        })
+        .catch(err => {
+            alert("❌ Eroare la trimiterea datelor!");
+            console.error(err);
+        });
+    }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("🔁 Script retur pornit");
+
+        const returnCheckbox = document.getElementById("includeReturn");
+        const returnOptions = document.getElementById("returnOptions");
+        const returnDate = document.getElementById("returnDate");
+        const returnRoute = document.getElementById("returnRoute");
+        const noReturn = document.getElementById("noReturnRoutes");
+
+        if (!returnCheckbox) {
+            console.warn("❌ Checkbox nu a fost găsit la momentul execuției.");
+            return;
+        }
+
+        returnCheckbox.addEventListener("change", () => {
+            returnOptions.classList.toggle("d-none", !returnCheckbox.checked);
+        });
+
+        returnDate?.addEventListener("change", () => {
+            const date = returnDate.value;
+            const from = "@Model.ToStation";
+            const to = "@Model.FromStation";
+
+            if (!date) return;
+
+            returnRoute.innerHTML = '<option>Se încarcă...</option>';
+            noReturn.classList.add("d-none");
+
+            fetch(`/Ticket/GetReturnRoutes?fromStation=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        returnRoute.innerHTML = '<option value="">-- Nicio rută disponibilă --</option>';
+                        noReturn.classList.remove("d-none");
+                        return;
+                    }
+
+                    returnRoute.innerHTML = '<option value="">-- Alege rută retur --</option>';
+                    data.forEach(r => {
+                        const opt = document.createElement("option");
+                        opt.value = r.TrainId;
+                        opt.textContent = `${r.TrainNumber} | ${r.DepartureTime} → ${r.ArrivalTime}`;
+                        returnRoute.appendChild(opt);
+                    });
+                })
+                .catch(err => {
+                    returnRoute.innerHTML = '<option>Eroare la încărcare</option>';
+                    console.error(err);
+                });
+        });
+    });
+</script>
+

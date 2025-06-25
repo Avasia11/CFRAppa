@@ -1,72 +1,369 @@
-﻿@{
-    ViewData["Title"] = "Caută Trenuri";
+﻿@model CFRApp.Models.RouteSearchViewModel
+
+@{
+    ViewData["Title"] = "Căutare rută";
 }
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Caută Trenuri</h2>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
-    <form asp-action="Search" method="post">
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">Stație plecare</label>
-                <select name="departureStationId" class="form-select" required>
-                    <option value="">Selectează...</option>
-                    @foreach (var station in ViewBag.Stations)
-                    {
-                        <option value="@station.Id">@station.Name (@station.City)</option>
-                    }
-                </select>
+<h2 class="mb-4 text-center text-primary fw-bold">Cautare rută</h2>
+
+<div class="row">
+    <div class="col-md-7">
+        <form asp-action="Search" method="post" class="bg-light rounded-4 p-4 shadow-sm">
+            <div class="row align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold">Stație plecare</label>
+                    <select asp-for="DepartureStation" asp-items="@(new SelectList(Model.Stations, "Name", "Name"))" class="form-select">
+                        <option value="">-- Alege stația --</option>
+                    </select>
+                </div>
+                <div class="col-md-2 text-center">
+                    <button type="button" class="btn btn-outline-primary mt-4 rounded-circle shadow-sm"
+                            style="width: 40px; height: 40px;" onclick="inverseStations()" title="Inversează stațiile">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </button>
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label fw-semibold">Stație destinație</label>
+                    <select asp-for="ArrivalStation" asp-items="@(new SelectList(Model.Stations, "Name", "Name"))" class="form-select">
+                        <option value="">-- Alege stația --</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Stație sosire</label>
-                <select name="arrivalStationId" class="form-select" required>
-                    <option value="">Selectează...</option>
-                    @foreach (var station in ViewBag.Stations)
-                    {
-                        <option value="@station.Id">@station.Name (@station.City)</option>
-                    }
-                </select>
+
+            <div class="form-group mt-4">
+                <label class="form-label fw-semibold">Data plecării</label>
+                <input asp-for="SearchDate" type="date" class="form-control" />
             </div>
+
+            <button type="submit" class="btn btn-primary mt-4 w-100">
+                <i class="bi bi-search"></i> Caută trenuri
+            </button>
+        </form>
+    </div>
+
+    <div class="col-md-5 d-flex align-items-center justify-content-center mt-4 mt-md-0">
+        <div class="text-center">
+            <img src="/images/cfr-visual.png.png" class="img-fluid mb-3 rounded-4 shadow" alt="Tren CFR"
+                 style="max-width: 280px; opacity: 0.75;" />
+            <p class="text-muted fst-italic">Caută trenuri directe și cu schimbări din toată țara.</p>
         </div>
+    </div>
+</div>
 
-        <div class="mb-3">
-            <label class="form-label">Dată călătorie</label>
-            <input type="date" name="travelDate" class="form-control" required />
-        </div>
+<hr />
 
-        <button type="submit" class="btn btn-primary">Caută trenuri</button>
-    </form>
-
-    @if (ViewBag.Results != null)
-    {
-        <hr class="mt-5" />
-        <h4>Rezultate pentru: <b>@ViewBag.DepartureStation</b> → <b>@ViewBag.ArrivalStation</b> în data de <b>@ViewBag.Date</b></h4>
-
-        @if (((IEnumerable<dynamic>)ViewBag.Results).Any())
+@if (Model.ResultsStructured != null && Model.ResultsStructured.Any())
+{
+    <h3 class="mt-5">Rute directe:</h3>
+    <div class="accordion" id="resultsAccordion">
+        @for (int i = 0; i < Model.ResultsStructured.Count; i++)
         {
-            <table class="table table-bordered mt-3">
-                <thead>
-                    <tr>
-                        <th>Tren</th>
-                        <th>Ora plecare</th>
-                        <th>Ora sosire</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in ViewBag.Results)
-                    {
-                        <tr>
-                            <td>@item.Tren.Number - @item.Tren.Name</td>
-                            <td>@item.OraPlecare?.ToString(@"hh\:mm")</td>
-                            <td>@item.OraSosire?.ToString(@"hh\:mm")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+            var item = Model.ResultsStructured[i];
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading@(i)">
+                    <button class="accordion-button collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapseDirect@(i)"
+                            aria-expanded="false" aria-controls="collapseDirect@(i)">
+                        <div class="w-100">
+                            <div class="fw-bold fs-5">@item.TrainNumber (@item.TrainType) - @item.Operator</div>
+                            <div class="d-flex justify-content-between text-center mt-1">
+                                <div>@item.DepartureStation → @item.ArrivalStation</div>
+                                <div>
+                                    @item.DepartureTime.ToString("hh\\:mm") –
+                                    @item.ArrivalTime.ToString("hh\\:mm") |
+                                    @Model.SearchDate.ToString("dd.MM.yyyy") |
+                                    Durată: @item.Duration
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                </h2>
+                <div id="collapseDirect@(i)" class="accordion-collapse collapse" data-bs-parent="#resultsAccordion">
+                    <div class="accordion-body">
+                        <h6 class="mb-3">🛤️ Opriri intermediare:</h6>
+                        <div class="ps-3">
+                            <div class="row fw-bold text-center mb-2">
+                                <div class="col-4">Stație</div>
+                                <div class="col-4">Plecare</div>
+                                <div class="col-4">Sosire</div>
+                            </div>
+                            @foreach (var stop in item.Stops)
+                            {
+                                <div class="row text-center align-items-center mb-1">
+                                    <div class="col-4">@stop.StationName</div>
+                                    <div class="col-4">@stop.Departure?.ToString("hh\\:mm")</div>
+                                    <div class="col-4">@stop.Arrival?.ToString("hh\\:mm")</div>
+                                </div>
+                            }
+                        </div>
+                        <hr />
+                        <strong>Tip tren:</strong> @item.TrainType <br />
+                        <strong>Operator:</strong> @item.Operator <br />
+                        <strong>🚆 Tren:</strong> @item.TrainNumber
+                        <div class="mt-3 d-flex gap-2">
+                            <button class="btn btn-success"
+                                    onclick="openBuyTicket(@item.TrainId, '@item.DepartureStation', '@item.ArrivalStation', '@item.DepartureTime.ToString("hh\\:mm")')"
+                                    data-bs-toggle="modal" data-bs-target="#buyTicketModal">
+                                🛒 Cumpără bilet
+                            </button>
+
+
+                            <button class="btn btn-outline-secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#priceModal"
+                                    data-train="@item.TrainNumber"
+                                    data-from="@item.DepartureStation"
+                                    data-to="@item.ArrivalStation"
+                                    data-time="@item.DepartureTime.ToString("hh\\:mm")"
+                                    data-stops="@item.Stops.Count - 1">
+                                💰 Verifică preț
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
-        else
-        {
-            <p class="text-danger mt-3">Nu am găsit niciun tren direct pe această rută.</p>
+    </div>
+
+    @if (Model.MultiTrainRoutes != null && Model.MultiTrainRoutes.Any())
+    {
+        <div class="text-center mb-4">
+            <button class="btn btn-outline-info" onclick="toggleTransfers()">🚃 Afișează rute cu schimbări</button>
+        </div>
+    }
+}
+
+@if (Model.MultiTrainRoutes != null && Model.MultiTrainRoutes.Any())
+{
+    var showInitially = !(Model.ResultsStructured?.Any() ?? false);
+    <div id="multiTrainResults" class="@(showInitially ? "" : "d-none")">
+        <h3 class="mt-5 text-success">🚃 Rute cu schimbări:</h3>
+        <div class="accordion" id="multiTrainAccordion">
+            @for (int i = 0; i < Model.MultiTrainRoutes.Count; i++)
+            {
+                var route = Model.MultiTrainRoutes[i];
+                var step0 = route.Steps.First();
+                var stepLast = route.Steps.Last();
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="transferHeading@(i)">
+                        <button class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#collapseTransfer@(i)"
+                                aria-expanded="false" aria-controls="collapseTransfer@(i)">
+                            <div class="w-100">
+                                <div class="fw-bold fs-5">Rută cu schimbare – Durată totală: @route.TotalDuration</div>
+                                <div class="d-flex justify-content-between mt-1">
+                                    <div>@step0.FromStation → @stepLast.ToStation</div>
+                                    <div>@step0.DepartureTime – @stepLast.ArrivalTime</div>
+                                </div>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="collapseTransfer@(i)" class="accordion-collapse collapse" data-bs-parent="#multiTrainAccordion">
+                        <div class="accordion-body">
+                            @foreach (var step in route.Steps)
+                            {
+                                <div class="border rounded p-3 mb-3 bg-light">
+                                    <strong>🚆 Tren:</strong> @step.TrainNumber <span class="badge bg-primary ms-2">Segment</span><br />
+                                    <strong>🛤️ Traseu:</strong> @step.FromStation → @step.ToStation<br />
+                                    <strong>Plecare:</strong> @step.DepartureTime<br />
+                                    <strong>Sosire:</strong> @step.ArrivalTime
+                                </div>
+                            }
+                            <div class="mt-3 d-flex gap-2">
+                                <button class="btn btn-success"
+                                        onclick="openBuyTicket(@step0.TrainId, '@step0.FromStation', '@stepLast.ToStation', '@step0.DepartureTime')"
+                                        data-bs-toggle="modal" data-bs-target="#buyTicketModal">
+                                    🛒 Cumpără bilet
+                                </button>
+
+                                <button class="btn btn-outline-secondary"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#priceModal"
+                                        data-train="@string.Join(" + ", route.Steps.Select(s => s.TrainNumber))"
+                                        data-from="@step0.FromStation"
+                                        data-to="@stepLast.ToStation"
+                                        data-time="@step0.DepartureTime"
+                                        data-stops="@route.Steps.Sum(s => s.EffectiveStops)">
+                                    💰 Verifică preț
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<!-- MODAL PENTRU PREȚ -->
+<!-- MODAL PENTRU PREȚ -->
+<div class="modal fade" id="priceModal" tabindex="-1" aria-labelledby="priceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header">
+                <h5 class="modal-title" id="priceModalLabel">Detalii preț tren</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Închide"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <i class="bi bi-cash-coin fs-1 text-success"></i>
+                    <h4 class="mt-2">Estimare preț bilet</h4>
+                    <p class="text-muted small fst-italic">Pe baza numărului de stații parcurse</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Tren:</strong> <span id="modalTrain"></span></li>
+                    <li class="list-group-item"><strong>De la:</strong> <span id="modalFrom"></span></li>
+                    <li class="list-group-item"><strong>Până la:</strong> <span id="modalTo"></span></li>
+                    <li class="list-group-item"><strong>Ora plecare:</strong> <span id="modalTime"></span></li>
+                    <li class="list-group-item"><strong>Stații parcurse:</strong> <span id="modalStops"></span></li>
+                    <li class="list-group-item">
+                        <strong>Tip călător:</strong>
+                        <select id="travelerType" class="form-select mt-2">
+                            <option value="1">Adult</option>
+                            <option value="0.5">Student</option>
+                            <option value="0.0">Elev</option>
+                            <option value="0.7">Pensionar</option>
+                            <option value="0.3">Veteran</option>
+                            <option value="0.2">Persoană cu dizabilități</option>
+                        </select>
+                    </li>
+                </ul>
+                <div class="text-center mt-4">
+                    <span class="fs-4 fw-bold text-success">💰 <span id="modalPrice"></span> lei</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function inverseStations() {
+        const departure = document.querySelector('[name="DepartureStation"]');
+        const arrival = document.querySelector('[name="ArrivalStation"]');
+        if (departure && arrival) {
+            const temp = departure.value;
+            departure.value = arrival.value;
+            arrival.value = temp;
         }
     }
+
+    function toggleTransfers() {
+        const el = document.getElementById('multiTrainResults');
+        if (el) el.classList.toggle('d-none');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('priceModal');
+        modal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const train = button.getAttribute('data-train');
+            const from = button.getAttribute('data-from');
+            const to = button.getAttribute('data-to');
+            const time = button.getAttribute('data-time');
+            const stops = parseInt(button.getAttribute('data-stops')) || 1;
+
+            const pricePerStation = 11;
+            const travelerTypeSelect = document.getElementById('travelerType');
+
+            const updatePrice = () => {
+                const multiplier = parseFloat(travelerTypeSelect.value) || 1;
+                const estimatedPrice = (stops * pricePerStation * multiplier).toFixed(2);
+                document.getElementById('modalPrice').textContent = estimatedPrice;
+            };
+
+            // Set initial content
+            document.getElementById('modalTrain').textContent = train;
+            document.getElementById('modalFrom').textContent = from;
+            document.getElementById('modalTo').textContent = to;
+            document.getElementById('modalTime').textContent = time;
+            document.getElementById('modalStops').textContent = stops;
+
+            // Set initial price
+            updatePrice();
+
+            // Bind change
+            travelerTypeSelect.removeEventListener('change', updatePrice);
+            travelerTypeSelect.addEventListener('change', updatePrice);
+        });
+    });
+</script>
+
+<!-- MODAL pentru cumpărare bilet -->
+<div class="modal fade" id="buyTicketModal" tabindex="-1" aria-labelledby="buyTicketModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="buyTicketContent">
+            <!-- Aici se încarcă partialul BuyTicket -->
+            <div class="text-center p-5">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-3">Se încarcă formularul de cumpărare...</p>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+    $('#buyTicketModal').on('shown.bs.modal', function () {
+        const returnCheckbox = document.getElementById("includeReturn");
+        const returnOptions = document.getElementById("returnOptions");
+        const returnDate = document.getElementById("returnDate");
+        const returnRoute = document.getElementById("returnRoute");
+        const noReturn = document.getElementById("noReturnRoutes");
+
+        if (!returnCheckbox) {
+            console.warn("❌ Checkbox retur nu există în DOM.");
+            return;
+        }
+
+        console.log("✅ Script retur atașat");
+
+        returnCheckbox.addEventListener("change", () => {
+            returnOptions.classList.toggle("d-none", !returnCheckbox.checked);
+        });
+
+        returnDate?.addEventListener("change", () => {
+            const date = returnDate.value;
+            const from = document.getElementById("modalFrom")?.textContent || "Brașov";
+            const to = document.getElementById("modalTo")?.textContent || "București";
+
+            if (!date) return;
+
+            returnRoute.innerHTML = '<option>Se încarcă...</option>';
+            noReturn?.classList.add("d-none");
+
+            fetch(`/Ticket/GetReturnRoutes?fromStation=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        returnRoute.innerHTML = '<option value="">-- Nicio rută disponibilă --</option>';
+                        noReturn?.classList.remove("d-none");
+                        return;
+                    }
+
+                    returnRoute.innerHTML = '<option value="">-- Alege rută retur --</option>';
+                    data.forEach(r => {
+                        const opt = document.createElement("option");
+                        opt.value = r.TrainId;
+                        opt.textContent = `${r.TrainNumber} | ${r.DepartureTime} → ${r.ArrivalTime}`;
+                        returnRoute.appendChild(opt);
+                    });
+                })
+                .catch(err => {
+                    returnRoute.innerHTML = '<option>Eroare la încărcare</option>';
+                    console.error(err);
+                });
+        });
+    });
+</script>
+
+
+<script>
+        function openBuyTicket(trainId, fromStation, toStation, departureTime) {
+        const url = `/Ticket/Buy?trainId=${trainId}&from=${encodeURIComponent(fromStation)}&to=${encodeURIComponent(toStation)}&departure=${encodeURIComponent(departureTime)}`;
+        $('#buyTicketContent').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"></div><p class="mt-3">Se încarcă formularul de cumpărare...</p></div>');
+        $('#buyTicketContent').load(url);
+    }
+
+</script>

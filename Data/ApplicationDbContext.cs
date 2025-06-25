@@ -15,6 +15,15 @@ namespace CFRApp.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Delay> Delays { get; set; }
         public DbSet<Payment> Payments { get; set; }
+
+        
+
+
+
+
     }
+
+
+
 }
 

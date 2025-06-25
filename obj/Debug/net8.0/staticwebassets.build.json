@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "G5Bn9eCUrW9BfsF7Cm6G8fI9HjlOT4aOq9oA9FInmrk=",
+  "Hash": "Ej7LJYEi3yxkyrbfZpYWtcv6wihC66ZNsC536fpUSHA=",
   "Source": "CFRApp",
   "BasePath": "_content/CFRApp",
   "Mode": "Default",
@@ -99,6 +99,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\avasi\\Desktop\\ProiectLicenta_CFR\\CFRApp\\CFRApp\\wwwroot\\images\\cfr-visual.png.png",
+      "SourceId": "CFRApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\avasi\\Desktop\\ProiectLicenta_CFR\\CFRApp\\CFRApp\\wwwroot\\",
+      "BasePath": "_content/CFRApp",
+      "RelativePath": "images/cfr-visual.png#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "3h9pitb33s",
+      "Integrity": "ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\cfr-visual.png.png"
     },
     {
       "Identity": "C:\\Users\\avasi\\Desktop\\ProiectLicenta_CFR\\CFRApp\\CFRApp\\wwwroot\\images\\dashboard_tracks.png",
@@ -1708,6 +1729,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-Jtxf9L+5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM="
+        }
+      ]
+    },
+    {
+      "Route": "images/cfr-visual.png.3h9pitb33s.png",
+      "AssetFile": "C:\\Users\\avasi\\Desktop\\ProiectLicenta_CFR\\CFRApp\\CFRApp\\wwwroot\\images\\cfr-visual.png.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1342064"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 13 Jun 2025 20:59:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "3h9pitb33s"
+        },
+        {
+          "Name": "label",
+          "Value": "images/cfr-visual.png.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k="
+        }
+      ]
+    },
+    {
+      "Route": "images/cfr-visual.png.png",
+      "AssetFile": "C:\\Users\\avasi\\Desktop\\ProiectLicenta_CFR\\CFRApp\\CFRApp\\wwwroot\\images\\cfr-visual.png.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1342064"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 13 Jun 2025 20:59:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-ya24pkWvicmfi4531wwHRCoXVZ9Adv5IgGruQ+kxP7k="
         }
       ]
     },
